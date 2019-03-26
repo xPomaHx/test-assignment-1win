@@ -1,0 +1,22 @@
+version: '3'
+services:
+  apiserver:
+    build: apiserver
+    environment:
+      - NODE_ENV=production
+  frontend:
+    build: frontend
+    depends_on:
+      - apiserver
+    environment:
+      - NODE_ENV=production
+      - HOST=0.0.0.0
+  nginx:
+    image: nginx:alpine
+    ports:
+      - 8044:80
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - apiserver
+      - frontend
